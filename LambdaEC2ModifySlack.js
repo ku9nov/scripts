@@ -39,7 +39,7 @@ exports.handler = (event, context, callback) => {
   const ec2 = new AWS.EC2({ region: instanceRegion});
   const params = {
     Attribute: 'instanceType',
-    InstanceId: 'changeme'
+    InstanceId: 'i-03109c576ec67fa58'
   };
 
   ec2.describeInstanceAttribute(params, (err, data) => {
@@ -77,8 +77,12 @@ exports.handler = (event, context, callback) => {
               })
             }
           })
-          .catch(err => callback(err));
-        } 
+          .catch(err => {
+            callback(err);
+            notifySlack('Modified Instance failed: ' + 'Error = ' + err).then(req =>{
+            })
+          })
+      }
     };
   });
 };
