@@ -73,7 +73,7 @@ exports.handler = (event, context, callback) => {
           .then(() => {
             callback(null, `Successfully modified ${event.instanceId} to ${event.instanceType}`)
             if (!ec2Error) {
-              notifySlack(`Successfully modified ${event.instanceName} to ${event.instanceType}`).then(req =>{
+              notifySlack(`Successfully modified ${process.env.instanceName} to ${process.env.instanceType}`).then(req =>{
               })
             }
           })
