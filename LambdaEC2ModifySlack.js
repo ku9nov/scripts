@@ -39,7 +39,7 @@ exports.handler = (event, context, callback) => {
   const ec2 = new AWS.EC2({ region: instanceRegion});
   const params = {
     Attribute: 'instanceType',
-    InstanceId: 'i-03109c576ec67fa58'
+    InstanceId: 'changeme'
   };
 
   ec2.describeInstanceAttribute(params, (err, data) => {
