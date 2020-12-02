@@ -18,11 +18,15 @@ exports.handler = (event, context, callback) => {
         callback(null, 'Dont need to upgrade')
     console.log(instanceTypeAttr)
       } else {
+        var wait = ms => new Promise(resolve => setTimeout(resolve, ms));
         Promise.resolve()
           .then(() => ec2.stopInstances({ InstanceIds: [instanceId] }).promise())
           .then(() => ec2.waitFor('instanceStopped', { InstanceIds: [instanceId] }).promise())
           .then(() => ec2.modifyInstanceAttribute({ InstanceId : instanceId, InstanceType: { Value: instanceType } }).promise())
           .catch(error => console.log('My Catch Error', error))
+          .then(() => {
+              return wait(3000)
+          })
           .then(() => ec2.startInstances({ InstanceIds: [instanceId] }).promise())
           .then(() => callback(null, `Successfully modified ${event.instanceId} to ${event.instanceType}`))
           .catch(err => callback(err));
