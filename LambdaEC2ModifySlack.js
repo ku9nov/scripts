@@ -52,11 +52,12 @@ exports.handler = (event, context, callback) => {
       const instanceTypeAttr = data.InstanceType.Value
       if (instanceType === instanceTypeAttr) {
         callback(null, 'Dont need to upgrade')
-        notifySlack('Dont need to upgrade').then(req =>{
+        //notifySlack('Dont need to upgrade').then(req =>{
         
-        })
+        //})
     console.log(instanceTypeAttr)
       } else {
+        var wait = ms => new Promise(resolve => setTimeout(resolve, ms));
         let ec2Error = null
         Promise.resolve()
           .then(() => ec2.stopInstances({ InstanceIds: [instanceId] }).promise())
@@ -68,6 +69,9 @@ exports.handler = (event, context, callback) => {
             notifySlack('Modified Instance failed: ' + 'Error = ' + error).then(req =>{
               
             })
+          })
+          .then(() => {
+              return wait(3000)
           })
           .then(() => ec2.startInstances({ InstanceIds: [instanceId] }).promise())
           .then(() => {
